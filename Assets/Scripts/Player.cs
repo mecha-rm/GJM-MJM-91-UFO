@@ -7,11 +7,33 @@ public class Player : MonoBehaviour
     // player's rigidbody (default variable has been depreciated).
     public Rigidbody rigidbody = null;
 
+    [Header("Movement")]
     // movement speed.
     private Vector3 moveSpeed = new Vector3(2500.0F, 000.0F, 2500.0F);
 
     // rotation speed 
     private float rotSpeed = 90.0F;
+
+
+    [Header("Hovering")]
+    // if hovering, turn off gravity.
+    public bool hovering = true;
+
+    // used to keep the player above the ground
+    // TODO: maybe make array
+    private Ray hoverRay;
+
+    // hovering distance above the ground.
+    private float hoverDist = 1.0F;
+
+    // TRACKER BEAM
+    [Header("Tractor Beam")]
+
+    // the object used for the tracker beam
+    public TrackerBeam trackerBeam = null;
+
+    // the beam
+    public bool beamActive = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +41,19 @@ public class Player : MonoBehaviour
         // grab rigid body attached to player.
         if (rigidbody == null)
             rigidbody = GetComponent<Rigidbody>();
+
+        // find tracker beam if not set.
+        if (trackerBeam == null)
+            trackerBeam = FindObjectOfType<TrackerBeam>();
+
+        // if the tracker beam should not be active.
+        if (trackerBeam != null)
+            trackerBeam.gameObject.SetActive(beamActive);
+
+        // ray for keeping fixed distance above the ground (directly down)
+        hoverRay = new Ray(transform.position, -transform.up);
     }
+
 
     // Update is called once per frame
     void Update()
@@ -71,9 +105,54 @@ public class Player : MonoBehaviour
         }
         
         // rotation
-        if(Input.GetAxis("Horizontal") != 0)
+        if(Input.GetAxisRaw("Horizontal") != 0)
         {
-            transform.Rotate(0.0F, rotSpeed * Input.GetAxis("Horizontal") * Time.deltaTime, 0.0F);
+            transform.Rotate(0.0F, rotSpeed * Input.GetAxisRaw("Horizontal") * Time.deltaTime, 0.0F);
+        }
+
+        // slow down
+        if(Input.GetAxis("Vertical") == 0)
+        {
+            Vector3 newVel = rigidbody.velocity; // new velocity
+            float slowDownRate = GameplaySingleton.GetInstance().AirDrag; // TODO: maybe ease-in/ease out?
+            newVel *= slowDownRate * Time.deltaTime; // slow down rate TODO: make rate variable
+
+
+            // checks if item should stop. TODO: make 
+            float zeroStop = GameplaySingleton.GetInstance().ZeroedVelocity;
+
+            if (Mathf.Abs(newVel.x) <= zeroStop) // x
+                newVel.x = 0.0F;
+
+            if (Mathf.Abs(newVel.y) <= zeroStop) // y
+                newVel.y = 0.0F;
+
+            if (Mathf.Abs(newVel.z) <= zeroStop) // z
+                newVel.z = 0.0F;
+
+            // sets hte velocity
+            rigidbody.velocity = newVel;
+        }
+
+
+        // HOVER //
+        // hover distance above ground.
+        // if(hovering)
+        // {
+        // 
+        // }
+        // 
+        // // if hovering, don't use gravity.
+        // rigidbody.useGravity = !hovering;
+
+        // TODO: include death
+
+
+        // TRACKER BEAM //
+        if(Input.GetKeyDown(KeyCode.Space)) // space bar
+        {
+            beamActive = !beamActive;
+            trackerBeam.gameObject.SetActive(beamActive);
         }
     }
 }
