@@ -5,7 +5,7 @@ using UnityEngine;
 public class TractorBeam : MonoBehaviour
 {
     // the speed of the objects moving in the tractor beam.
-    private float tractorSpeed = 100.0F;
+    private Vector3 tractorSpeed = new Vector3(100.0F, 75.0F, 100.0F);
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +47,7 @@ public class TractorBeam : MonoBehaviour
     }
 
     // the strength of the tractor beam's pull
-    public float TractorSpeed
+    public Vector3 TractorSpeed
     {
         get
         {

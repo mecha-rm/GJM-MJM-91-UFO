@@ -62,7 +62,7 @@ public class Tractable : MonoBehaviour
         if(isTractable && tractorBeam != null)
         {
             // the tractor beam object is enabled (i.e. it is in use)
-            if(tractorBeam.enabled)
+            if(tractorBeam.isActiveAndEnabled)
             {
                 Vector3 direc = tractorBeam.transform.position - transform.position; // movement direction
                 direc.y = Mathf.Abs(direc.y); // should always be moving upwards
@@ -70,11 +70,11 @@ public class Tractable : MonoBehaviour
                 // rigid body was found.
                 if (rigidBody != null)
                 {
-                    rigidBody.AddForce(direc.normalized * tractorBeam.TractorSpeed * Time.deltaTime, ForceMode.Acceleration);
+                    rigidBody.AddForce(Vector3.Scale(direc.normalized, tractorBeam.TractorSpeed) * Time.deltaTime, ForceMode.Acceleration);
                 }
                 else // no rigid body, so translate object.
                 {
-                    rigidBody.transform.Translate(direc.normalized * tractorBeam.TractorSpeed * Time.deltaTime);
+                    rigidBody.transform.Translate(Vector3.Scale(direc.normalized, tractorBeam.TractorSpeed) * Time.deltaTime);
                 }
             }
             else // not in use, so leave effect.
@@ -82,7 +82,7 @@ public class Tractable : MonoBehaviour
                 tractorBeam = null;
 
                 if(rigidBody != null)
-                rigidBody.useGravity = outsideBeamGravity; // return gravity back to normal
+                    rigidBody.useGravity = outsideBeamGravity; // return gravity back to normal
             }
             
 
