@@ -30,10 +30,10 @@ public class Player : MonoBehaviour
     [Header("Tractor Beam")]
 
     // the object used for the tracker beam
-    public TrackerBeam trackerBeam = null;
+    public TractorBeam trackerBeam = null;
 
     // the beam
-    public bool beamActive = false;
+    public bool trackerBeamActive = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,11 +44,11 @@ public class Player : MonoBehaviour
 
         // find tracker beam if not set.
         if (trackerBeam == null)
-            trackerBeam = FindObjectOfType<TrackerBeam>();
+            trackerBeam = FindObjectOfType<TractorBeam>();
 
         // if the tracker beam should not be active.
         if (trackerBeam != null)
-            trackerBeam.gameObject.SetActive(beamActive);
+            trackerBeam.gameObject.SetActive(trackerBeamActive);
 
         // ray for keeping fixed distance above the ground (directly down)
         hoverRay = new Ray(transform.position, -transform.up);
@@ -102,6 +102,7 @@ public class Player : MonoBehaviour
 
             // adds force to rigid body.
             rigidbody.AddForce(force, ForceMode.Acceleration);
+            // rigidbody.AddForce(force, ForceMode.Force);
         }
         
         // rotation
@@ -151,8 +152,14 @@ public class Player : MonoBehaviour
         // TRACKER BEAM //
         if(Input.GetKeyDown(KeyCode.Space)) // space bar
         {
-            beamActive = !beamActive;
-            trackerBeam.gameObject.SetActive(beamActive);
+            trackerBeamActive = !trackerBeamActive; // toggle
+            // trackerBeamActive = true; // while held
+            trackerBeam.gameObject.SetActive(trackerBeamActive);
         }
+        // else if(Input.GetKeyUp(KeyCode.Space)) // let go
+        // {
+        //     trackerBeamActive = false;
+        //     trackerBeam.gameObject.SetActive(trackerBeamActive);
+        // }
     }
 }
