@@ -147,9 +147,9 @@ public class Player : MonoBehaviour
     }
 
     // called when the player takes damage.
-    public void Damage()
+    public void Damage(float amount)
     {
-        health -= 1.0F;
+        health -= amount;
     }
 
     // updates the player's hover above the ground.

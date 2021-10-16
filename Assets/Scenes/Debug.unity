@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 46726750}
   m_Layer: 0
   m_Name: Ground Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -248,6 +248,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff24c77f21cb0804cbd6643d8b60da4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  aimDistance: 100
+  projPool: {fileID: 1879987583}
+  fireProjectiles: 1
+  fireOffset: 2.5
+  shotCoolDown: 0
+  shotCoolDownMax: 20
 --- !u!1001 &65290413
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -404,7 +411,7 @@ GameObject:
   - component: {fileID: 77991807}
   m_Layer: 0
   m_Name: Player Ship
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -444,6 +451,7 @@ MonoBehaviour:
   trackerBeamActive: 0
   health: 100
   maxHealth: 100
+  damageAmnt: 1
   attackPower: 100
   maxAttackPower: 100
   genericPickup: 0
@@ -1910,7 +1918,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1773993576}
   - component: {fileID: 1773993577}
-  - component: {fileID: 1773993578}
+  - component: {fileID: 1773993579}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1951,7 +1959,7 @@ MonoBehaviour:
   timer: 120
   timeStart: 120
   timerText: {fileID: 523674755}
---- !u!114 &1773993578
+--- !u!114 &1773993579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1963,8 +1971,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b16a1739198a94a81a7b973e378015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolName: Enemy Pool
+  poolName: Player Pool
   prefab: 
+--- !u!1 &1879987581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1879987582}
+  - component: {fileID: 1879987583}
+  m_Layer: 0
+  m_Name: Enemy Projectile Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1879987582
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879987581}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9218785, y: -0.094848305, z: 0.40371323}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1879987583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879987581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b16a1739198a94a81a7b973e378015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolName: Enemy Pool
+  prefab: Prefabs/Enemy Projectile
 --- !u!1 &1892704523
 GameObject:
   m_ObjectHideFlags: 0
@@ -2207,7 +2260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4266100570301145509, guid: 04ded6633e3216b4a9a184e471486b9d, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4266100570301145509, guid: 04ded6633e3216b4a9a184e471486b9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

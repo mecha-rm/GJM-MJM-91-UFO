@@ -10,18 +10,36 @@ public class Projectile : MonoBehaviour
     // if 'true', the owner can be harmed by their own projectile.
     public bool ownerHarm = false;
 
+    // the attack power of the projectile.
+    public float attackPower = 10.0F;
+
+    // the pool for the projectile.
+    // if there is no pool, the bullet is destroyed.
+    public ProjectilePool pool = null;
+
+    [Header("Life")]
+    // the life time of the projectile.
+    public float lifeTime = 0.0F;
+
+    // the maximum life time of the projectile.
+    public float lifeTimeMax = 100.0F;
+
+    // if 'true', the projectile has a life span.
+    // if 'false', the projectile continues infinitely.
+    public bool hasLifeSpan = true;
+
+    [Header("Movement")]
     // the rigid body for the projectile.
     public Rigidbody rigidbody = null;
+
+    // apply movement to the projectile.
+    public bool applyMovement = true;
 
     // the direction of the projectile, normalized.
     public Vector3 direcNormal;
 
     // the speed of the projectile.
-    public float speed = 50.0F;
-
-    // the pool for the projectile.
-    // if there is no pool, the bullet is destroyed.
-    public ProjectilePool pool = null;
+    public float speed = 60.0F;
 
     // if 'true', the projectile is 'ended' when it runs into something.
     // if 'pool' is not null, it returns to the pool. Otherwise, the projectile is destroyed.
@@ -33,6 +51,9 @@ public class Projectile : MonoBehaviour
         // if the rigidbody is set to null, then get the component for it.
         if (rigidbody == null)
             rigidbody = GetComponent<Rigidbody>();
+
+        // sets life time
+        lifeTime = lifeTimeMax;
     }
 
     // called when the projectile collides with something.
@@ -64,7 +85,7 @@ public class Projectile : MonoBehaviour
 
                     // deal damage
                     if (plyr != null)
-                        plyr.Damage();
+                        plyr.Damage(attackPower);
                 }
             }  
         }
@@ -78,6 +99,12 @@ public class Projectile : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    // resets the projectile life time.
+    public void ResetLifeTime()
+    {
+        lifeTime = lifeTimeMax;
     }
 
     // returns the pool
@@ -101,6 +128,21 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // move projectile.
+        if(applyMovement && rigidbody != null)
+        {
+            rigidbody.AddForce(direcNormal * speed * Time.deltaTime, ForceMode.Impulse);
+        }
+
+        // if the projectile has a life span.
+        if(hasLifeSpan)
+        {
+            // reduce life time.
+            lifeTime -= Time.deltaTime;
+
+            // projectile should be destroyed.
+            if (lifeTime <= 0.0F)
+                HitEntity(null);
+        }
     }
 }

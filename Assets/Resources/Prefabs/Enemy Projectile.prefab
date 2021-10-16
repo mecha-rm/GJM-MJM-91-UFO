@@ -171,7 +171,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d3fa10a8d5757459ba35cc5ec49963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
-  direcNormal: {x: 0, y: 0, z: 0}
-  speed: 50
+  owner: {fileID: 0}
+  ownerHarm: 0
   pool: {fileID: 0}
+  lifeTime: 0
+  lifeTimeMax: 100
+  hasLifeSpan: 1
+  rigidbody: {fileID: 6954620596336156885}
+  applyMovement: 1
+  direcNormal: {x: 0, y: 0, z: 0}
+  speed: 60
+  endOnContact: 1

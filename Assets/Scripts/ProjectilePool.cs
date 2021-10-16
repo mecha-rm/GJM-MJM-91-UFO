@@ -4,7 +4,7 @@ using UnityEngine;
 
 // pool for projectiles
 // this should be a template class, but it's fine for the sake of this project.
-public class ProjectilePool : MonoBehaviour
+public class ProjectilePool: MonoBehaviour
 {
     // the name of the pool
     public string poolName;
@@ -117,6 +117,12 @@ public class ProjectilePool : MonoBehaviour
             Debug.LogError("Projectile provided was null.");
             return;
         }
+
+        // resets the projectile's life time.
+        proj.ResetLifeTime();
+
+        // no one owns this projectile anymore.
+        proj.owner = null;
 
         // deactivates the projectile.
         proj.gameObject.SetActive(false);
