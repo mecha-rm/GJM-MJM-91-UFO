@@ -15,6 +15,9 @@ public class GameplaySingleton
     // value used to determine if the entity should stop or not.
     private float zeroedVel = 0.001F;
 
+    
+    //
+
     // constructor
     private GameplaySingleton()
     {

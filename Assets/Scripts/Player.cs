@@ -7,11 +7,15 @@ public class Player : MonoBehaviour
     // player's rigidbody (default variable has been depreciated).
     public Rigidbody rigidbody = null;
 
+    // the game manager
+    public GameplayManager manager;
+
     [Header("Movement")]
     // movement speed.
     private Vector3 moveSpeed = new Vector3(2500.0F, 2500.0F, 2500.0F);
-    // use movement caps for each axis
-    private bool useSDX = true, useSDY = false, useSDZ = true;
+
+    // use movement caps for each axis (y is true so objects pulled up don't cause the ship to move upwards infinitely).
+    private bool useSDX = true, useSDY = true, useSDZ = true;
 
     // rotation speed 
     private float rotSpeed = 90.0F;
@@ -56,6 +60,11 @@ public class Player : MonoBehaviour
         if (rigidbody == null)
             rigidbody = GetComponent<Rigidbody>();
 
+        // find gameplay manager.
+        if (manager == null)
+            manager = FindObjectOfType<GameplayManager>();
+
+
         // if the starting y-value should be used.
         if (startYAsHoverDist)
             hoverDist = Mathf.Abs(transform.position.y);
@@ -92,7 +101,7 @@ public class Player : MonoBehaviour
         if (!hovering)
             return;
 
-        // TODO: cast multiple rays if need be.
+        // TODO: cast multiple rays
         // checsk to infinity
         Ray hoverRay = new Ray(transform.position, -transform.up);
 
@@ -236,19 +245,6 @@ public class Player : MonoBehaviour
         }
 
 
-        // HOVER //
-        // hover distance above ground.
-        // if(hovering)
-        // {
-        // 
-        // }
-        // 
-        // // if hovering, don't use gravity.
-        // rigidbody.useGravity = !hovering;
-
-        // TODO: include death
-
-
         // TRACKER BEAM //
         if(Input.GetKeyDown(KeyCode.Space)) // space bar
         {
@@ -264,5 +260,9 @@ public class Player : MonoBehaviour
 
         // update hovering
         UpdateHovering();
+
+        // the player is dead.
+        if (GameplayManager.InDeathPlane(transform.position))
+            manager.GameOver();
     }
 }
