@@ -9,6 +9,14 @@ public class GameplayManager : MonoBehaviour
     // the player in the game.
     public Player player;
 
+    // TODO: replace timer with fuel guage.
+
+    // the player's health bar
+    public Slider healthBar;
+
+    // the player's attack bar
+    public Slider attackBar;
+
     [Header("Timer")]
     // timer is active.
     public bool activeTimer = true;
@@ -91,12 +99,12 @@ public class GameplayManager : MonoBehaviour
         GameEndInfo geiComp;
 
         // prefab not found, so instantiate object.
-        if (prefab == null && geiObject == null)
+        if (prefab == null && geiObject == null) // create new object
         {
             // game end
             geiObject = new GameObject("Game End Info");
         }
-        else
+        else if (prefab != null && geiObject == null) // instantiate prefab
         {
             // instantiate from prefab.
             geiObject = (GameObject)Instantiate(prefab);
@@ -128,6 +136,7 @@ public class GameplayManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // TIMER / FUEL //
         // if the timer is active.
         if (activeTimer)
         {
@@ -145,6 +154,31 @@ public class GameplayManager : MonoBehaviour
                 GameOver();
             }
         }
+
+        // HEALTH, ATTACK //
+        if(player != null)
+        {
+            // health bar is not equal to null.
+            if (healthBar != null)
+            {
+                // health value
+                float h = (player.MaxHealth != 0) ? player.Health / player.MaxHealth : 0.0F;
+
+                // health bar
+                healthBar.value = h;
+            }
+
+            // attack bar is not equal to null.
+            if (attackBar != null)
+            {
+                // health value
+                float a = (player.AttackPower != 0) ? player.AttackPower / player.maxAttackPower : 0.0F;
+
+                // health bar
+                attackBar.value = a;
+            }
+        }
+
 
         // timer text is set.
         if (timerText != null)

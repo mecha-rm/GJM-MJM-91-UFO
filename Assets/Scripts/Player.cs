@@ -48,7 +48,23 @@ public class Player : MonoBehaviour
     public bool trackerBeamActive = false;
 
     // score //
-    [Header("Score")]
+    [Header("Health")]
+    // health
+    public float health = 100.0F;
+
+    // max health
+    public float maxHealth = 100.0F;
+
+    // amount of damage that gets taken.
+    public float damageAmnt = 1.0F;
+
+    [Header("Attack Power")]
+    // attack power
+    public float attackPower = 100.0F;
+
+    // maximum attack power
+    public float maxAttackPower = 100.0F;
+
     // different scores
     public int genericPickup = 0;
 
@@ -81,6 +97,42 @@ public class Player : MonoBehaviour
         // hoverRay = new Ray(transform.position, -transform.up);
     }
 
+    // current health
+    public float Health
+    {
+        get
+        {
+            return health;
+        }
+    }
+
+    // maximum health
+    public float MaxHealth
+    {
+        get
+        {
+            return maxHealth;
+        }
+    }
+
+    // current attack
+    public float AttackPower
+    {
+        get
+        {
+            return attackPower;
+        }
+    }
+
+    // maximum attack
+    public float MaxAttackPower
+    {
+        get
+        {
+            return maxAttackPower;
+        }
+    }
+
     // on enter for the collision.
     public void OnCollisionEnter(Collision collision)
     {
@@ -92,6 +144,12 @@ public class Player : MonoBehaviour
             genericPickup += 1; // TODO: change which thing gets added to.
             Destroy(tbl.gameObject); // destroy the object.
         }
+    }
+
+    // called when the player takes damage.
+    public void Damage()
+    {
+        health -= 1.0F;
     }
 
     // updates the player's hover above the ground.
