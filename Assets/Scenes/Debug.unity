@@ -214,6 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 46726749}
   - component: {fileID: 46726750}
+  - component: {fileID: 46726751}
   m_Layer: 0
   m_Name: Ground Enemy
   m_TagString: Enemy
@@ -248,13 +249,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff24c77f21cb0804cbd6643d8b60da4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 5
+  maxHealth: 5
   target: {fileID: 0}
   aimDistance: 100
+  contactAttackPower: 10
   projPool: {fileID: 1879987583}
   fireProjectiles: 1
   fireOffset: 2.5
   shotCoolDown: 0
   shotCoolDownMax: 10
+--- !u!65 &46726751
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46726748}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &65290413
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -455,8 +472,11 @@ MonoBehaviour:
   damageAmnt: 1
   attackPower: 100
   maxAttackPower: 100
+  infiniteAttackPower: 0
+  attackDecRate: 20
+  attackRepRate: 8.5
   attackDelay: 0
-  attackDelayMax: 1
+  attackDelayMax: 0.5
   attackPosOffset: 5
   projPool: {fileID: 0}
   genericPickup: 0
@@ -851,7 +871,7 @@ BoxCollider:
   m_GameObject: {fileID: 459471715}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

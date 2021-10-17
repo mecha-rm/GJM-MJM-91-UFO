@@ -177,6 +177,10 @@ public class GameplayManager : MonoBehaviour
                 // health bar
                 attackBar.value = a;
             }
+
+            // player is dead.
+            if (player.Health <= 0.0F)
+                GameOver();
         }
 
 

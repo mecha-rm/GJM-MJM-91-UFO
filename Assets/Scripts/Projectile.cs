@@ -87,6 +87,16 @@ public class Projectile : MonoBehaviour
                     if (plyr != null)
                         plyr.DamagePlayer(attackPower);
                 }
+                // hit enemy
+                if(entity.tag == "Enemy")
+                {
+                    // get component.
+                    Enemy enemy = entity.GetComponent<Enemy>();
+
+                    // deal damage
+                    if (enemy != null)
+                        enemy.DamageEnemy(attackPower);
+                }
             }  
         }
 
