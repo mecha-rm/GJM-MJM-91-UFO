@@ -5,7 +5,7 @@ using UnityEngine;
 public class TractorBeam : MonoBehaviour
 {
     // the speed of the objects moving in the tractor beam.
-    private Vector3 tractorSpeed = new Vector3(100.0F, 75.0F, 100.0F);
+    private Vector3 tractorSpeed = new Vector3(100.0F, 500.0F, 100.0F);
 
     // TODO: figure out how to extend tractor beam to any distance?
 

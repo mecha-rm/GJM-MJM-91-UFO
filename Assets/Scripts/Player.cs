@@ -58,12 +58,25 @@ public class Player : MonoBehaviour
     // amount of damage that gets taken.
     public float damageAmnt = 1.0F;
 
+    // TODO: setup attack bar
     [Header("Attack Power")]
     // attack power
     public float attackPower = 100.0F;
 
     // maximum attack power
     public float maxAttackPower = 100.0F;
+
+    // amount of time until an attack can go off
+    public float attackDelay = 0.0F;
+
+    // max amount of delay time.
+    public float attackDelayMax = 1.0F;
+
+    // the offset for the attack's position.
+    public float attackPosOffset = 5.0F;
+
+    // pool of projectiles fired by the player. 
+    public ProjectilePool projPool;
 
     // different scores
     public int genericPickup = 0;
@@ -93,8 +106,9 @@ public class Player : MonoBehaviour
         if (trackerBeam != null)
             trackerBeam.gameObject.SetActive(trackerBeamActive);
 
-        // ray for keeping fixed distance above the ground (directly down)
-        // hoverRay = new Ray(transform.position, -transform.up);
+        // projectile pool
+        if (projPool == null)
+            projPool = GetComponent<ProjectilePool>();
     }
 
     // current health
@@ -147,7 +161,7 @@ public class Player : MonoBehaviour
     }
 
     // called when the player takes damage.
-    public void Damage(float amount)
+    public void DamagePlayer(float amount)
     {
         health -= amount;
     }
@@ -249,6 +263,61 @@ public class Player : MonoBehaviour
 
     }
 
+    // used to make the player shoot a projectile.
+    public void Shoot()
+    {
+        // the projectile pool
+        if(projPool == null)
+        {
+            Debug.LogError("No projectile pool available.");
+            return;
+        }
+
+        // TODO: fix projectile aiming.
+        // player wants to fire
+        if (Input.GetAxisRaw("Fire1") != 0 && Input.anyKeyDown && attackDelay <= 0.0F)
+        {
+            // player position in screen view
+            Vector3 plyrScreenPos = Camera.main.WorldToScreenPoint(transform.position); // convert player to screen pos
+
+            // difference between screen pos of player and mouse click
+            Vector3 diffScreen = Input.mousePosition - plyrScreenPos; // direction towards mouse in screen space.
+
+            Vector3 diffWorld = Camera.main.ScreenToWorldPoint(diffScreen); // convert to world point.
+            diffWorld.z += transform.forward.z * 5.0F; // offsets to be in front of the player.
+
+            // gets the direction the shot should go in.
+            Vector3 direc = diffWorld - transform.position;
+            direc.z *= -1;
+            direc.Normalize(); // normalize direction
+
+            // getting the projectile.
+            Projectile proj = projPool.GetProjectile();
+
+            // set projectile in direction.
+            if (proj != null)
+            {
+                proj.owner = gameObject;
+                proj.transform.position = transform.position + direc * attackPosOffset;
+                proj.direcNormal = direc;
+
+                // attack delay
+                attackDelay = attackDelayMax;
+            }
+
+
+        }
+        else if (attackDelay > 0.0F) // shot delay in place.
+        {
+            // attack delay countdown
+
+            attackDelay -= Time.deltaTime;
+
+            if (attackDelay < 0.0F)
+                attackDelay = 0.0F;
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -343,10 +412,14 @@ public class Player : MonoBehaviour
         // TRACKER BEAM //
         if(Input.GetKeyDown(KeyCode.Space)) // space bar
         {
+            // TOOD: move to function.
             trackerBeamActive = !trackerBeamActive; // toggle
             // trackerBeamActive = true; // while held
-            trackerBeam.gameObject.SetActive(trackerBeamActive);
         }
+
+        // active beam
+        trackerBeam.gameObject.SetActive(trackerBeamActive);
+
         // else if(Input.GetKeyUp(KeyCode.Space)) // let go
         // {
         //     trackerBeamActive = false;
@@ -355,6 +428,9 @@ public class Player : MonoBehaviour
 
         // update hovering
         UpdateHovering();
+
+        // update shooting.
+        Shoot();
 
         // the player is dead.
         if (GameplayManager.InDeathPlane(transform.position))

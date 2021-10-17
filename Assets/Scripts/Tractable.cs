@@ -70,7 +70,7 @@ public class Tractable : MonoBehaviour
                 // rigid body was found.
                 if (rigidBody != null)
                 {
-                    rigidBody.AddForce(Vector3.Scale(direc.normalized, tractorBeam.TractorSpeed) * Time.deltaTime, ForceMode.Acceleration);
+                    rigidBody.AddForce(Vector3.Scale(direc.normalized, tractorBeam.TractorSpeed) * Time.deltaTime, ForceMode.Impulse);
                 }
                 else // no rigid body, so translate object.
                 {

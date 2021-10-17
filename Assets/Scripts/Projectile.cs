@@ -85,7 +85,7 @@ public class Projectile : MonoBehaviour
 
                     // deal damage
                     if (plyr != null)
-                        plyr.Damage(attackPower);
+                        plyr.DamagePlayer(attackPower);
                 }
             }  
         }
