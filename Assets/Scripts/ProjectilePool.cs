@@ -104,7 +104,11 @@ public class ProjectilePool: MonoBehaviour
                 gotProj = true;
             }
         }
-        
+
+        // set this as the pool for the projectile.
+        if (proj != null)
+            proj.pool = this;
+
         return proj;
     }
 

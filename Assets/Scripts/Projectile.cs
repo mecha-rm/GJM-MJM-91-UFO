@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
     public float lifeTime = 0.0F;
 
     // the maximum life time of the projectile.
-    public float lifeTimeMax = 100.0F;
+    public float lifeTimeMax = 8.5F;
 
     // if 'true', the projectile has a life span.
     // if 'false', the projectile continues infinitely.

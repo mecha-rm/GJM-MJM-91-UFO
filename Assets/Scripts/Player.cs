@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -20,6 +18,8 @@ public class Player : MonoBehaviour
     // rotation speed 
     private float rotSpeed = 90.0F;
 
+    // the maximum y-value the player can reached.
+    private float maxPosY = 20.0F;
 
     [Header("Hovering")]
     // if hovering, turn off gravity.
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     // private Ray hoverRay;
 
     // distance the ray is casted.
-    private float rayDist = 500.0F;
+    private float rayDist = 800.0F;
 
     // if 'true', the starting y-value is considered the ray distance.
     private bool startYAsHoverDist = true;
@@ -159,39 +159,76 @@ public class Player : MonoBehaviour
         if (!hovering)
             return;
 
-        // TODO: cast multiple rays
-        // checsk to infinity
-        Ray hoverRay = new Ray(transform.position, -transform.up);
+        // casts out rays in 5 directions (n/s/e/w and directly down)
+        Ray[] hoverRays = new Ray[5];
 
-        // grabs all the hits
-        RaycastHit[] hits = Physics.RaycastAll(hoverRay, Mathf.Max(rayDist, hoverDist));
+        // offsets the ray origin in the direction it's pointing.
+        float rayOriginOffset = 2.50F;
 
-        // the max y-distance
-        bool foundHoverPoint = false;
-        Vector3 closestOnY = Vector3.zero;
-        float closestDistY = hoverDist;
-
-        // goes through each hit.
-        foreach(RaycastHit hit in hits)
         {
-            // if the ray hit a stage object.
-            if(hit.collider.gameObject.tag == "Stage")
-            {
-                // gets height above the other object.
-                float height = Mathf.Abs(transform.position.y - hit.transform.position.y);
+            // angles of the rays
+            float xAngle = 60.0F;
+            // float yAngle = 0.0F;
+            // float yInc = 360.0F / (hoverRays.Length - 1); // makes rays around the object.
 
-                // if this is the closest ground object to the player.
-                if (height <= closestDistY)
+            // centre/directly down
+            hoverRays[0] = new Ray(transform.position, -transform.up);
+
+            // top (rotate on x - changed y and z)
+            // hoverRays[1] = new Ray(transform.position + transform.forward * rayOriginOffset, GameplayPhysics.RotateEulerX(hoverRays[0].direction, xAngle, true));
+            hoverRays[1] = new Ray(transform.position, GameplayPhysics.RotateEulerX(hoverRays[0].direction, xAngle, true));
+
+            // rotate values along y-axis
+            // left
+            // yAngle += yInc;
+            // hoverRays[2] = new Ray(transform.position + -transform.right * rayOriginOffset, GameplayPhysics.RotateEulerY(hoverRays[1].direction, 90.0F, true));
+            hoverRays[2] = new Ray(transform.position, GameplayPhysics.RotateEulerY(hoverRays[1].direction, 90.0F, true));
+
+            // bottom
+            // hoverRays[3] = new Ray(transform.position + -transform.forward * rayOriginOffset, GameplayPhysics.RotateEulerY(hoverRays[1].direction, 180.0F, true));
+            hoverRays[3] = new Ray(transform.position, GameplayPhysics.RotateEulerY(hoverRays[1].direction, 180.0F, true));
+
+            // right
+            // hoverRays[4] = new Ray(transform.position + transform.right * rayOriginOffset, GameplayPhysics.RotateEulerY(hoverRays[1].direction, 270.0F, true));
+            hoverRays[4] = new Ray(transform.position, GameplayPhysics.RotateEulerY(hoverRays[1].direction, 270.0F, true));
+        }
+
+        // checking collisions.
+        bool foundHoverPoint = false; // found a point to hover over.
+        Vector3 closestOnY = Vector3.zero;
+
+        // goes through each hover ray.
+        foreach (Ray hoverRay in hoverRays)
+        {
+            // grabs all the hits
+            RaycastHit[] hits = Physics.RaycastAll(hoverRay, Mathf.Max(rayDist, hoverDist));
+
+            // the max y-distance
+            float closestDistY = hoverDist;
+
+            // goes through each hit on a regular collider.
+            foreach (RaycastHit hit in hits)
+            {
+                // if the ray hit a stage object.
+                if (hit.collider.gameObject.tag == "Stage")
                 {
-                    foundHoverPoint = true; // found a point to hover over.
-                    closestDistY = height;
-                    closestOnY = hit.transform.position;
-                }     
+
+                    // gets height above the other object.
+                    float height = Mathf.Abs(transform.position.y - hit.point.y);
+
+                    // if this is the closest ground object to the player.
+                    if (height <= closestDistY)
+                    {
+                        foundHoverPoint = true; // found a point to hover over.
+                        closestDistY = height;
+                        closestOnY = hit.point;
+                    }
+                }
             }
         }
 
         // point to hover over.
-        if(foundHoverPoint == true)
+        if (foundHoverPoint == true)
         {
             rigidbody.useGravity = false;
 
@@ -200,8 +237,8 @@ public class Player : MonoBehaviour
 
             // new position
             transform.position = new Vector3(
-                transform.position.x, 
-                y, 
+                transform.position.x,
+                y,
                 transform.position.z);
 
         }
@@ -273,7 +310,7 @@ public class Player : MonoBehaviour
         if(Input.GetAxis("Vertical") == 0)
         {
             Vector3 newVel = rigidbody.velocity; // new velocity
-            float slowDownRate = GameplaySingleton.GetInstance().AirDrag; // TODO: maybe ease-in/ease out?
+            float slowDownRate = GameplayPhysics.GetInstance().AirDrag; // TODO: maybe ease-in/ease out?
             
             // applies slow down rate.
             if(useSDX) // X
@@ -287,7 +324,7 @@ public class Player : MonoBehaviour
 
 
             // checks if item should stop. TODO: make 
-            float zeroStop = GameplaySingleton.GetInstance().ZeroedVelocity;
+            float zeroStop = GameplayPhysics.GetInstance().ZeroedVelocity;
 
             if (useSDX && Mathf.Abs(newVel.x) <= zeroStop) // x
                 newVel.x = 0.0F;
@@ -322,5 +359,12 @@ public class Player : MonoBehaviour
         // the player is dead.
         if (GameplayManager.InDeathPlane(transform.position))
             manager.GameOver();
+
+        // TODO: this does not work.
+        // if the player has reached their maximum height above the ground, adjust their position.
+        // if(transform.position.y >= maxPosY)
+        // {
+        //     transform.position.Set(transform.position.x, maxPosY, transform.position.z);
+        // }
     }
 }

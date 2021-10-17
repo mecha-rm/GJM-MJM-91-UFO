@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // gets the gameplay variables
-public class GameplaySingleton
+public class GameplayPhysics
 {
     // the instance
-    private static GameplaySingleton instance = null;
+    private static GameplayPhysics instance = null;
 
     // drag variables
     private float airDrag = 0.95F;
@@ -19,19 +19,19 @@ public class GameplaySingleton
     //
 
     // constructor
-    private GameplaySingleton()
+    private GameplayPhysics()
     {
         Start();
     }
 
     // gets the instance
-    public static GameplaySingleton GetInstance()
+    public static GameplayPhysics GetInstance()
     {
         // no instance generated
         if (instance == null)
         {
             // generates instance
-            instance = new GameplaySingleton();
+            instance = new GameplayPhysics();
         }
 
         return instance;

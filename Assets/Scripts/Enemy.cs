@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
     public float shotCoolDown = 0.0F;
 
     // the maximum shot cool down time.
-    public float shotCoolDownMax = 20.0F;
+    public float shotCoolDownMax = 10.0F;
 
     // Start is called before the first frame update
     void Start()

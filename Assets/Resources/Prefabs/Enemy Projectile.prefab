@@ -173,9 +173,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   ownerHarm: 0
+  attackPower: 10
   pool: {fileID: 0}
   lifeTime: 0
-  lifeTimeMax: 100
+  lifeTimeMax: 8.5
   hasLifeSpan: 1
   rigidbody: {fileID: 6954620596336156885}
   applyMovement: 1
