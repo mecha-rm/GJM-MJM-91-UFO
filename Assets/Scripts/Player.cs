@@ -503,7 +503,10 @@ public class Player : MonoBehaviour
             force.Scale(moveSpeed);
             force *= Input.GetAxis("Vertical") * Time.deltaTime;
 
+            
+
             // adds force to rigid body.
+            // rigidbody.AddForce(force, ForceMode.Acceleration);
             rigidbody.AddForce(force, ForceMode.Acceleration);
             // rigidbody.AddForce(force, ForceMode.Force);
         }
@@ -524,8 +527,8 @@ public class Player : MonoBehaviour
             if(useSDX) // X
                 newVel.x *= slowDownRate * Time.deltaTime;
             
-            if (useSDY) // Y
-                newVel.y *= slowDownRate * Time.deltaTime;
+            // if (useSDY) // Y
+            //     newVel.y *= slowDownRate * Time.deltaTime;
             
             if (useSDZ) // Z
                 newVel.z *= slowDownRate * Time.deltaTime;
@@ -537,8 +540,8 @@ public class Player : MonoBehaviour
             if (useSDX && Mathf.Abs(newVel.x) <= zeroStop) // x
                 newVel.x = 0.0F;
 
-            if (useSDY && Mathf.Abs(newVel.y) <= zeroStop) // y
-                newVel.y = 0.0F;
+            // if (useSDY && Mathf.Abs(newVel.y) <= zeroStop) // y
+            //     newVel.y = 0.0F;
 
             if (useSDZ && Mathf.Abs(newVel.z) <= zeroStop) // z
                 newVel.z = 0.0F;

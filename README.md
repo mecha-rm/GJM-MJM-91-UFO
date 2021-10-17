@@ -1,2 +1,5 @@
 # GJM-MJM-91-UFO
-Repository for Mini Jam 91, which is to make UFO game that has fishing in some form.
+This project was originally started for Mini Jam 91 - UFO on Itch.io.
+As a side note, the game also required fishing in some form, but that hasn't been implemented.
+This project couldn't be completed in time, so it was never submitted.
+It's likely that the project will sitll be worked on, but that is not a guarantee.
