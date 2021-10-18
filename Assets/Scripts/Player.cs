@@ -308,136 +308,17 @@ public class Player : MonoBehaviour
         }
 
 
-        // Debug.Log("Mouse World Position: " + Camera.main.ScreenToWorldPoint(
-        //     new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.focalLength)).ToString());
-
         // TODO: fix projectile aiming, and check if in view.
         // player wants to fire
         if (Input.GetAxisRaw("Fire1") != 0 && Input.anyKeyDown && attackDelay <= 0.0F)
         {
-            // // // go relative to the player.
-            // // // the screen projection in fornt of the player.
-            // // 
-            // // // for smaller the FOV, the farther it is, and the less you can see adjacent to you.
-            // // float targetPlaneDist = Camera.main.fieldOfView; // this will be the distance from the camera to go forward
-            // // 
-            // // // essentially it projects a screen in front of the player that they will aim for.
-            // // 
-            // // // player position in screen view
-            // // Vector3 plyrScreenPos = Camera.main.WorldToScreenPoint(transform.position); // convert player to screen pos
-            // // 
-            // // // Debug.Log("Mouse Pos Screen: " + Input.mousePosition.ToString());
-            // // // Debug.Log("Mouse Pos World: " + Camera.main.ScreenToWorldPoint(Input.mousePosition).ToString());
-            // // 
-            // // // difference between screen pos of player and mouse click
-            // // Vector3 diffScreen = Input.mousePosition - plyrScreenPos; // direction towards mouse in screen space.
-            // // 
-            // // // projects the screen to be in front of the player by 'targetPlaneDist'.
-            // // Vector3 target = transform.position + transform.forward * targetPlaneDist;
-            // // target += diffScreen; // offset target by screen position
-            // // 
-            // // 
-            // // Vector3 diffWorld = Camera.main.ScreenToWorldPoint(diffScreen); // convert to world point.
-            // // diffWorld.z += transform.forward.z * 5.0F; // offsets to be in front of the player.
-            // // 
-            // // // gets the direction the shot should go in.
-            // // Vector3 direc = diffWorld - transform.position;
-            // // direc.z *= -1;
-            // // direc.Normalize(); // normalize direction
-            // // 
-            // // direc = target - transform.position;
-            // // direc.Normalize();
-            // 
-            // // for smaller the FOV, the farther it is, and the less you can see adjacent to you.
-            // // float targetPlaneDist = Camera.main.fieldOfView; // this will be the distance from the camera to go forward
-            // 
-            // // Camera pCam = Instantiate(Camera.main);
-            // // pCam.transform.position = transform.position; // move camera to player position
-            // 
-            // // converts mouse position to its place in the viewport.
-            // // this also doubles as the direction from the camera view.
-            // Vector3 mouseViewPos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            // 
-            // // gets mouse view pos angle relative to a vector with an angle of 0.
-            // // SOH - CAH - TOA
-            // 
-            // // angle between current x and desired x
-            // // z is 1, so x = 0 for adjacent. For hypotenuse, z is 
-            // Vector3 temp1 = new Vector3();
-            // Vector3 temp2 = new Vector3();
-            // 
-            // // only the x-value is different
-            // temp1 = Vector3.forward;
-            // temp2.x = mouseViewPos.x - Camera.main.rect.center.x;
-            // temp2.y = temp1.y;
-            // temp2.z = temp1.z;
-            // 
-            // // angle to rotate along the y-axis (horizontal change).
-            // // float yAngle = Vector3.Angle(temp1, temp2);
-            // float yAngle = Mathf.Acos(temp1.magnitude / temp2.magnitude); // cah (cos a = adj/hyp)
-            // 
-            // // angle between current y and desired y.
-            // // only the y-value is different
-            // temp1 = Vector3.forward;
-            // temp2.x = temp1.x;
-            // temp2.y = mouseViewPos.y - Camera.main.rect.center.y;
-            // temp2.z = temp1.z;
-            // 
-            // // angle to rotate along the x-axis (vertical change).
-            // // float xAngle = Vector3.Angle(temp1, temp2);
-            // float xAngle = Mathf.Acos(temp1.magnitude / temp2.magnitude); // cah (cos a = adj/hyp)
-            // 
-            // // gets target direction
-            // // rotate on the y
-            // Vector3 direc;
-            // direc = GameplayPhysics.RotateEulerY(Camera.main.transform.forward, yAngle, false);
-            // 
-            // // rotate on the x
-            // direc = GameplayPhysics.RotateEulerX(direc, xAngle, false);
-            // 
-            // // rotate on the y
-            // // yAngle += Mathf.Deg2Rad * Camera.main.transform.rotation.eulerAngles.y;
-            // // direc = GameplayPhysics.RotateEulerY(Vector3.forward, yAngle, false);
-            // // 
-            // // // rotate on the x
-            // // xAngle += Mathf.Deg2Rad * Camera.main.transform.rotation.eulerAngles.x;
-            // // direc = GameplayPhysics.RotateEulerX(direc, xAngle, false);
-            // 
-            // direc.Normalize();
-
-            // TODO: figure out how to offset it from the player
-
-            // setting up auto fire
-            // find all enemies.
-            // Enemy[] enemies = FindObjectsOfType<Enemy>();
-            // Vector3 target = transform.position + transform.forward * 10.0F;
-            // float range = 200.0F;
-            // float closest = range;
-            // 
-            // // checks each enemy
-            // foreach(Enemy e in enemies)
-            // {
-            //     float eDist = Vector3.Distance(transform.position, e.transform.position);
-            // 
-            //     // if the enemy is within range, and it is the closest enemy.
-            //     if(eDist < closest)
-            //     {
-            //         closest = eDist;
-            //         target = e.transform.position;
-            //     }
-            // }
-            // 
-            // // direction
-            // Vector3 direc = target - transform.position;
-            // direc.Normalize();
-
-
-            // the center of the screen is (0, 0, 0).
-            // get mouse position in world space. At least in this case, using the focal length is more accurate for aiming.
+            // get mouse position in world space.
+            // The position may not seem accurate to what it seems, but since we just need direction, it's fine.
+            // the mouse position won't adjust properly without a positive z-value.
+            // At least in this case, using the focal length is more accurate for aiming.
             Vector3 camWPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.focalLength));
             Vector3 target = camWPos - transform.position; // target
-            // Vector3 target = camWPos - Camera.main.transform.position; // target
-            Vector3 direc = target.normalized;
+            Vector3 direc = target.normalized; // direction
             
             // getting the projectile.
             Projectile proj = projPool.GetProjectile();
@@ -449,7 +330,6 @@ public class Player : MonoBehaviour
 
                 // doing it based on the camera position doesn't work consistently.
                 proj.transform.position = transform.position + direc * attackPosOffset;
-                // proj.transform.position = Camera.main.transform.position + direc * attackPosOffset;
                 proj.direcNormal = direc;
 
                 // attack delay
