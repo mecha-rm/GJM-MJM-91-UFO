@@ -307,7 +307,9 @@ public class Player : MonoBehaviour
                 return;
         }
 
-        // Debug.Log("Mouse View: " + Camera.main.ScreenToViewportPoint(Input.mousePosition).ToString());
+
+        // Debug.Log("Mouse World Position: " + Camera.main.ScreenToWorldPoint(
+        //     new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.focalLength)).ToString());
 
         // TODO: fix projectile aiming, and check if in view.
         // player wants to fire
@@ -407,28 +409,36 @@ public class Player : MonoBehaviour
 
             // setting up auto fire
             // find all enemies.
-            Enemy[] enemies = FindObjectsOfType<Enemy>();
-            Vector3 target = transform.position + transform.forward * 10.0F;
-            float range = 200.0F;
-            float closest = range;
+            // Enemy[] enemies = FindObjectsOfType<Enemy>();
+            // Vector3 target = transform.position + transform.forward * 10.0F;
+            // float range = 200.0F;
+            // float closest = range;
+            // 
+            // // checks each enemy
+            // foreach(Enemy e in enemies)
+            // {
+            //     float eDist = Vector3.Distance(transform.position, e.transform.position);
+            // 
+            //     // if the enemy is within range, and it is the closest enemy.
+            //     if(eDist < closest)
+            //     {
+            //         closest = eDist;
+            //         target = e.transform.position;
+            //     }
+            // }
+            // 
+            // // direction
+            // Vector3 direc = target - transform.position;
+            // direc.Normalize();
 
-            // checks each enemy
-            foreach(Enemy e in enemies)
-            {
-                float eDist = Vector3.Distance(transform.position, e.transform.position);
 
-                // if the enemy is within range, and it is the closest enemy.
-                if(eDist < closest)
-                {
-                    closest = eDist;
-                    target = e.transform.position;
-                }
-            }
-
-            // direction
-            Vector3 direc = target - transform.position;
-            direc.Normalize();
-
+            // the center of the screen is (0, 0, 0).
+            // get mouse position in world space. At least in this case, using the focal length is more accurate for aiming.
+            Vector3 camWPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.focalLength));
+            Vector3 target = camWPos - transform.position; // target
+            // Vector3 target = camWPos - Camera.main.transform.position; // target
+            Vector3 direc = target.normalized;
+            
             // getting the projectile.
             Projectile proj = projPool.GetProjectile();
 
@@ -436,7 +446,10 @@ public class Player : MonoBehaviour
             if (proj != null)
             {
                 proj.owner = gameObject;
+
+                // doing it based on the camera position doesn't work consistently.
                 proj.transform.position = transform.position + direc * attackPosOffset;
+                // proj.transform.position = Camera.main.transform.position + direc * attackPosOffset;
                 proj.direcNormal = direc;
 
                 // attack delay

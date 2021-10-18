@@ -69,6 +69,70 @@ public class GameplayPhysics
         }
     }
 
+    // rotates to face the mouse.
+    public static void RotateToFaceMouse2D(Camera cam, Transform tform)
+    {
+        // mouse world position
+        Vector3 mouseWpos = cam.ScreenToWorldPoint(Input.mousePosition);
+
+        // move to be relative to world origin
+        Vector3 fromOrigin = mouseWpos - tform.position;
+        fromOrigin.z = 0.0F;
+
+        // rotation value
+        float theta = Vector3.Angle(Vector3.up, fromOrigin);
+
+        // rotation direction
+        float direc = (mouseWpos.x < tform.position.x) ? 1 : -1;
+
+        // reset to base rotation
+        Vector2 rotXY = new Vector2(tform.rotation.x, tform.rotation.y); // save x and y
+        tform.rotation = Quaternion.identity;
+
+        // rotates to face camera
+        tform.Rotate(0.0F, 0.0F, theta * direc);
+
+        // give back x and y rotations
+        Quaternion objectRot = tform.rotation;
+        objectRot.x = rotXY.x;
+        objectRot.y = rotXY.x;
+        tform.rotation = objectRot;
+    }
+
+    // generates a normal that faces the mouse in 3D
+    // fromPos: geneate normal from the provided position.
+    // cam: the camera the mouse is being viewed through.
+    public static Vector3 NormalTowardsMouse3D(Vector3 fromPos, Camera cam)
+    {
+        // both ortho and perspective cameras have far planes, but using the focal length for a perspective camera is more accurate.
+        // as such, the focal length is used for perspective, and far clip plane is used for the orthographic.
+        // however, all that matters is that the z-value is positive.
+        
+        if(!cam.orthographic) // perspective camera
+            return NormalTowardsMouse3D(fromPos, cam, cam.focalLength);
+        else // orthographic camera.
+            return NormalTowardsMouse3D(fromPos, cam, cam.farClipPlane);
+    }
+
+    // generates a normal that faces the mouse in 3D
+    // fromPos: geneate normal from the provided position.
+    // mouseZ: is the mouse's z-axis position. This must be positive.
+    // cam: the camera the mouse is being viewed through.
+    public static Vector3 NormalTowardsMouse3D(Vector3 fromPos, Camera cam, float mouseZ)
+    {
+        // the center of the screen is (0, 0, 0).
+        // get mouse position in world space.
+        Vector3 camWPos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Mathf.Abs(mouseZ)));
+
+        // target
+        Vector3 target = camWPos - fromPos;
+
+        // direction to face
+        Vector3 direc = target.normalized;
+
+        return direc;
+    }
+
     // euler rotation (2D)
     public static Vector2 RotateEuler(Vector2 v, float angle, bool inDegrees)
     {

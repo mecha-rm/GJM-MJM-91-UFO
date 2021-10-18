@@ -103,6 +103,10 @@ public class Projectile : MonoBehaviour
         // pool exists, so return it to there.
         if (pool != null)
         {
+            // resetting the velocity of the projectiles.
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+
             pool.ReturnProjectile(this);
         }
         else // pool does not exist, so delete.
