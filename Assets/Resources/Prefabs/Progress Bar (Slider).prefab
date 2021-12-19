@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 8598170462098099460}
   - component: {fileID: 8598170462098099461}
   m_Layer: 5
-  m_Name: Power Bar
+  m_Name: Progress Bar (Slider)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
