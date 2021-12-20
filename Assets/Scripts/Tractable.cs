@@ -5,6 +5,10 @@ using UnityEngine;
 // put on objects that can be pulled in by the tractor beam.
 public class Tractable : MonoBehaviour
 {
+    // the tractable object.
+    // if not set, it is set to the object this component is attached to.
+    public GameObject self;
+
     // if 'true', then the object can be pulled by the tractor beam.
     public bool isTractable = true;
 
@@ -21,9 +25,24 @@ public class Tractable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // checks self variable.
+        if (self == null)
+        {
+            if(gameObject.transform.parent != null)
+                self = gameObject.transform.parent.gameObject;
+            else
+                self = gameObject;
+
+        }
+            
+
         // if no rigidbody was set, look for one.
         if (rigidBody == null)
-            rigidBody = GetComponent<Rigidbody>();
+            rigidBody = self.GetComponent<Rigidbody>();
+
+        // if no rigidbody was set, add one.
+        if(rigidBody == null)
+            rigidBody = self.AddComponent<Rigidbody>();
 
         // grabs value for using gravity.
         if (rigidBody != null)
@@ -53,7 +72,11 @@ public class Tractable : MonoBehaviour
             rigidBody.useGravity = outsideBeamGravity;
     }
 
-    // Exit Tractor Beam ()
+    // called when the tractable object is absorbed.
+    public void OnAbsorbtion()
+    {
+        Destroy(self); // destroy the object.
+    }
 
     // Update is called once per frame
     void Update()
@@ -64,7 +87,7 @@ public class Tractable : MonoBehaviour
             // the tractor beam object is enabled (i.e. it is in use)
             if(tractorBeam.isActiveAndEnabled)
             {
-                Vector3 direc = tractorBeam.transform.position - transform.position; // movement direction
+                Vector3 direc = tractorBeam.transform.position - self.transform.position; // movement direction
                 direc.y = Mathf.Abs(direc.y); // should always be moving upwards
 
                 // rigid body was found.

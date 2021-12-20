@@ -12,7 +12,7 @@ public class TractorBeam : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // tractorSpeed = Vector3.one;
     }
 
     // called when something enters the tractor beam

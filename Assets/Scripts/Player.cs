@@ -175,14 +175,32 @@ public class Player : MonoBehaviour
             }    
         }
 
-        Tractable tbl = collision.gameObject.GetComponent<Tractable>(); // gets the tractable component.
+        // attempts to absorb the object.
+        AbsorbTractedObject(collision.gameObject);
+    }
+
+    // trigger collisions
+    // public void OnTriggerEnter(Collider other)
+    // {
+    //     // attempts to absorb the object.
+    //     AbsorbTractedObject(other.gameObject);
+    // }
+
+    // absorbs the object.
+    public bool AbsorbTractedObject(GameObject target)
+    {
+        Tractable tbl = target.GetComponent<Tractable>(); // gets the tractable component.
 
         // this is a tractable object.
-        if(tbl != null)
+        if (tbl != null)
         {
             genericPickup += 1; // TODO: change which thing gets added to.
-            Destroy(tbl.gameObject); // destroy the object.
+            // Destroy(tbl.gameObject); // destroy the object.
+            tbl.OnAbsorbtion();
+            return true;
         }
+
+        return false;
     }
 
     // called when the player takes damage.
