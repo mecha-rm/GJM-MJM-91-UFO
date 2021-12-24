@@ -28,10 +28,13 @@ public class Tractable : MonoBehaviour
         // checks self variable.
         if (self == null)
         {
-            if(gameObject.transform.parent != null)
-                self = gameObject.transform.parent.gameObject;
-            else
-                self = gameObject;
+            // if(gameObject.transform.parent != null)
+            //     self = gameObject.transform.parent.gameObject;
+            // else
+            //     self = gameObject;
+
+            // defaults to given object.
+            self = gameObject;
 
         }
             
@@ -47,6 +50,24 @@ public class Tractable : MonoBehaviour
         // grabs value for using gravity.
         if (rigidBody != null)
             outsideBeamGravity = rigidBody.useGravity;
+    }
+
+    // called when entering the trigger.
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
+    // calledd when still in the trigger.
+    private void OnTriggerStay(Collider other)
+    {
+        
+    }
+
+    // called when leaving the trigger
+    private void OnTriggerExit(Collider other)
+    {
+        
     }
 
     // called when the item is tracted by the tractor beam.

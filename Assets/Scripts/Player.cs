@@ -180,11 +180,11 @@ public class Player : MonoBehaviour
     }
 
     // trigger collisions
-    // public void OnTriggerEnter(Collider other)
-    // {
-    //     // attempts to absorb the object.
-    //     AbsorbTractedObject(other.gameObject);
-    // }
+    public void OnTriggerEnter(Collider other)
+    {
+        // attempts to absorb the object.
+        AbsorbTractedObject(other.gameObject);
+    }
 
     // absorbs the object.
     public bool AbsorbTractedObject(GameObject target)
