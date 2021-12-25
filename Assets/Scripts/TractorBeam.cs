@@ -12,7 +12,8 @@ public class TractorBeam : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // tractorSpeed = Vector3.one;
+        // TODO: only for testing purposes. Remove this later.
+        tractorSpeed = Vector3.one;
     }
 
     // called when something enters the tractor beam
@@ -20,7 +21,7 @@ public class TractorBeam : MonoBehaviour
     {
         // grabs component to check.
         Tractable tbl = other.gameObject.GetComponent<Tractable>();
-
+    
         // in beam
         if (tbl != null)
         {
@@ -30,13 +31,13 @@ public class TractorBeam : MonoBehaviour
         }
             
     }
-
+    
     // called when something leaves the tractor beam
     private void OnTriggerExit(Collider other)
     {
         // checks component.
         Tractable tbl = other.gameObject.GetComponent<Tractable>();
-
+    
         // out of beam
         if (tbl != null)
         {
@@ -45,7 +46,7 @@ public class TractorBeam : MonoBehaviour
                 tbl.OnTractorBeamExit(this);
         }
             
-
+    
     }
 
     // the strength of the tractor beam's pull

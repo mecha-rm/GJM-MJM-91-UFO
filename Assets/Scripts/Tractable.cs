@@ -52,22 +52,52 @@ public class Tractable : MonoBehaviour
             outsideBeamGravity = rigidBody.useGravity;
     }
 
-    // called when entering the trigger.
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
+    // Done in the TractorBeam class.
+    // // called when entering a collider.
+    // private void OnCollisionStay(Collision collision)
+    // {
+    //     // checks if tractor beam.
+    //     if (tractorBeam == null)
+    //         TryEnterTractorBeam(collision.gameObject);
+    // }
+    // 
+    // // called when exiting a collider.
+    // private void OnCollisionExit(Collision collision)
+    // {
+    //     // checks if tractor beam
+    //     if (tractorBeam != null)
+    //         TryExitTractorBeam(collision.gameObject);
+    // }
+    // 
+    // // calledd when still in the trigger.
+    // private void OnTriggerStay(Collider other)
+    // {
+    //     // checks if tractor beam.
+    //     if (tractorBeam == null)
+    //         TryEnterTractorBeam(other.gameObject);
+    // }
+    // 
+    // // called when leaving the trigger
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     // checks if tractor beam
+    //     if (tractorBeam != null)
+    //         TryExitTractorBeam(other.gameObject);
+    // }
 
-    // calledd when still in the trigger.
-    private void OnTriggerStay(Collider other)
+    // tries to enter the tractor beam.
+    private void TryEnterTractorBeam(GameObject ent)
     {
-        
-    }
+        // if no tractor beam is set.
+        if (tractorBeam == null)
+        {
+            // trys to get the tractor beam.
+            TractorBeam beam;
 
-    // called when leaving the trigger
-    private void OnTriggerExit(Collider other)
-    {
-        
+            // goes to enter function.
+            if (ent.TryGetComponent<TractorBeam>(out beam))
+                OnTractorBeamEnter(beam);
+        }
     }
 
     // called when the item is tracted by the tractor beam.
@@ -81,16 +111,40 @@ public class Tractable : MonoBehaviour
             rigidBody.useGravity = false;
     }
 
+    // tries to exit the tractor beam.
+    private void TryExitTractorBeam(GameObject ent)
+    {
+        // if tractor beam is set.
+        if (tractorBeam != null)
+        {
+            // trys to get the tractor beam.
+            TractorBeam beam;
+
+            // goes to enter function.
+            if (ent.TryGetComponent<TractorBeam>(out beam))
+                OnTractorBeamEnter(beam);
+        }
+    }
+
+    // called when leaving the tractor beam.
+    public void OnTractorBeamExit()
+    {
+        OnTractorBeamExit(tractorBeam);
+    }
+
     // called when the item is let go by the tractor beam.
     public void OnTractorBeamExit(TractorBeam beam)
     {
         // it's the beam the object was trapped in.
         if(beam == tractorBeam)
+        {
             tractorBeam = null;
 
-        // may now use gravity since not in tractor beam.
-        if (rigidBody != null)
-            rigidBody.useGravity = outsideBeamGravity;
+            // may now use gravity since not in tractor beam.
+            if (rigidBody != null)
+                rigidBody.useGravity = outsideBeamGravity;
+        }
+      
     }
 
     // called when the tractable object is absorbed.
