@@ -180,24 +180,35 @@ public class Player : MonoBehaviour
     }
 
     // trigger collisions
-    public void OnTriggerEnter(Collider other)
-    {
-        // attempts to absorb the object.
-        AbsorbTractedObject(other.gameObject);
-    }
+    // this can't be used because the trigger collision counts for the parent and its children.
+    // public void OnTriggerEnter(Collider other)
+    // {
+    //     // attempts to absorb the object.
+    //     AbsorbTractedObject(other.gameObject);
+    // }
 
     // absorbs the object.
     public bool AbsorbTractedObject(GameObject target)
     {
+        // finds component on given object.
         Tractable tbl = target.GetComponent<Tractable>(); // gets the tractable component.
+
+        // finds component in children if its equal to null, or not enabled.
+        if (tbl == null)
+            tbl = target.GetComponentInChildren<Tractable>(false);
+        else if(tbl != null && tbl.enabled == false)
+            tbl = target.GetComponentInChildren<Tractable>(false);
 
         // this is a tractable object.
         if (tbl != null)
         {
-            genericPickup += 1; // TODO: change which thing gets added to.
-            // Destroy(tbl.gameObject); // destroy the object.
-            tbl.OnAbsorbtion();
-            return true;
+            if(tbl.enabled)
+            {
+                genericPickup += 1; // TODO: change which thing gets added to.
+                // Destroy(tbl.gameObject); // destroy the object.
+                tbl.OnAbsorbtion();
+                return true;
+            }
         }
 
         return false;
